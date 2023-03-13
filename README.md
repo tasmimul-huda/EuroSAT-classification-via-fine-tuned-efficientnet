@@ -10,3 +10,6 @@
 ## Output
 **Loss Accuracy Curve For Baseline CNN**
 ![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/loss_accuracy_curve.png?raw=true)
+
+**COnfusion Matrix For Baseline CNN**
+![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/confusion_matrix.png?raw=true)
