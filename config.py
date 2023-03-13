@@ -7,18 +7,20 @@ class CFG:
         image_folder = 'D:/EuroSAT/EuroSAT/'
         model_save_path = 'D:/EuroSAT/weights/'
         tensorboard_logs_path = "D:/EuroSAT/tensorboard/logs/"
+        figure_save_path = "D:/EuroSAT/Figures/"
         
     # dataset parameter
     class Dataset:
-        batch_size = 32
-        img_size = (32, 32)
+        batch_size = 64
+        img_size = (64, 64)
         buffer_size = 1000
     
     class HyperParameter:
         batch_size = 64
-        learning_rate = 0.001
-        input_shape = (224, 224, 3)
+        learning_rate = 0.0001
+        input_shape = (64, 64, 3)
         num_classes = 10
+        epochs = 100
         
         
         

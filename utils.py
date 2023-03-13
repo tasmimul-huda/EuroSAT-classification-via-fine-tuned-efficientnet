@@ -19,7 +19,7 @@ class ModelUtils:
         plt.show()
 
     @staticmethod
-    def plot_loss_accuracy(history):
+    def plot_loss_accuracy(save_path,history):
         fig, ax = plt.subplots(1, 2, figsize=(15, 5))
         ax[0].plot(history.history['loss'], label='train')
         ax[0].plot(history.history['val_loss'], label='validation')
@@ -33,6 +33,7 @@ class ModelUtils:
         ax[1].set_ylabel('Accuracy')
         ax[1].set_title('Accuracy vs Epoch')
         ax[1].legend()
+        plt.savefig(save_path+'loss_accuracy_curve.png')
         plt.show()
 
     @staticmethod
