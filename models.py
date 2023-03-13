@@ -58,6 +58,9 @@ class BaselineCNN:
         outputs = tf.keras.layers.Dense(self.num_classes, activation='softmax')(x)
         model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
         return model
+    
+    def compile(self):
+        self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate =0.0001), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     def train(self, train_data, val_data, epochs, batch_size,learning_rate, model_save_path, log_dir):
         self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate =learning_rate), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -85,7 +88,7 @@ class BaselineCNN:
         self.model.save(filepath)
         
     def load_model(self, model_path):
-        self.model.load_model(model_path)
+        self.model.load_weights(model_path)
         
     def plot_model_architecture(self, file_path):
         tf.keras.utilsplot_model(self, to_file=file_path, show_shapes=True)
