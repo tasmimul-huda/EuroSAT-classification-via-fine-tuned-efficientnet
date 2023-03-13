@@ -33,7 +33,7 @@ class ModelUtils:
         cm.columns.name = 'Predicted label'
         fig, ax = plt.subplots(figsize=figsize)
         sns.heatmap(cm, annot=annot, fmt='', ax=ax)
-        plt.savefig(save_path+'confusion_matrix.png')
+        plt.savefig(save_path)
         
         
     
@@ -66,7 +66,7 @@ class ModelUtils:
         ax[1].set_ylabel('Accuracy')
         ax[1].set_title('Accuracy vs Epoch')
         ax[1].legend()
-        plt.savefig(save_path+'loss_accuracy_curve.png')
+        plt.savefig(save_path)
         plt.show()
 
     # function for scoring roc auc score for multi-class
@@ -86,7 +86,7 @@ class ModelUtils:
         c_ax.legend()
         c_ax.set_xlabel('False Positive Rate')
         c_ax.set_ylabel('True Positive Rate')
-        plt.savefig(save_path+'roc_auc_curve.png')
+        plt.savefig(save_path)
         plt.show()
         return roc_auc_score(y_test, y_pred, average=average)
 
@@ -141,6 +141,55 @@ for i in range(len(label_map)):
         text = ax.text(j, i, confusion_mtx[i, j],
                        ha="center", va="center", color="w")
 plt.show()
+
+
+'''
+
+
+'''
+
+    report = classification_report(true_labels, predicted_label, target_names=class_names)
+    report_dict = classification_report(true_labels, predicted_label, target_names=class_names, output_dict=True, zero_division=0)
+    
+    # Convert the report to a dictionary
+
+    # Create a bar plot of the report
+    print(report)
+    print(report_dict.keys())
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar(report_dict['macro avg'].keys(), report_dict['macro avg'].values())
+    ax.set_ylim(0, 1)
+    ax.set_title('Classification Report')
+    ax.set_xlabel('Class')
+    ax.set_ylabel('Accuracy')
+
+    # Save the plot as an image
+    plt.savefig('classification_report.png')
+    plt.show()
+    
+    
+    # print(report_dict.keys())
+    # for key in report_dict.keys():
+    #     if isinstance(report_dict[key], dict):
+    #         print(f'{key}: {report_dict[key]["precision"]}')
+                    
+    # plt.bar(report_dict.keys(), [report_dict[key]['precision'] for key in report_dict.keys()])
+    # plt.title('Classification Report')
+    # plt.xlabel('Class')
+    # plt.ylabel('Precision')
+    # plt.show()
+    
+    # fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
+
+    # metrics = ['precision', 'recall', 'f1-score']
+    # for i, metric in enumerate(metrics):
+    #     # print(metric)
+    #     axs[i].bar(report_dict.keys(), [report_dict[key][metric] for key in list(report_dict.keys())])
+    #     axs[i].set_title(metric.title())
+    #     axs[i].set_xlabel('Class')
+        
+    # axs[0].set_ylabel('Score')
+    # plt.show()
 
 
 '''
