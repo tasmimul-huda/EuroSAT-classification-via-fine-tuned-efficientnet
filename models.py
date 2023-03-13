@@ -19,7 +19,7 @@ class EfficientNetModel:
     def train(self, train_data, val_data, epochs, batch_size,learning_rate, model_save_path, log_dir):
         self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate =learning_rate), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
         early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, verbose=1, mode='min', restore_best_weights=True)
-        checkpoint = tf.keras.callbacks.ModelCheckpoint(model_save_path + 'best_model.h5', monitor='val_loss', mode='min', save_weights_only=True,save_best_only=True, verbose=1)
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(model_save_path + 'effnet_best_model.h5', monitor='val_loss', mode='min', save_weights_only=True,save_best_only=True, verbose=1)
         tensorboard = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1, write_graph=True, write_images=True)
         callbacks = [early_stop, checkpoint, tensorboard]
         history = self.model.fit(train_data, 
@@ -31,6 +31,7 @@ class EfficientNetModel:
     
     def predict(self, data):
         return self.model.predict(data)
+    
     
 class BaselineCNN:
     def __init__(self, input_shape, num_classes):
@@ -71,8 +72,21 @@ class BaselineCNN:
                                  callbacks=callbacks)
         return history
     def evaluate(self, data):
-        loss, accuracy = self.model.evaluate(test_data)
+        loss, accuracy = self.model.evaluate(data)
         return loss, accuracy
     
     def predict(self, data):
         return self.model.predict(data)
+    
+    def summary(self):
+        return self.model.summary()
+    
+    def save_model(self, filepath):
+        self.model.save(filepath)
+        
+    def load_model(self, model_path):
+        self.model.load_model(model_path)
+        
+    def plot_model_architecture(self, file_path):
+        tf.keras.utilsplot_model(self, to_file=file_path, show_shapes=True)
+        
