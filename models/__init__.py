@@ -1,2 +1,2 @@
-from .baselinecnn import BaselineCNN
+from .baselinecnn import BaselineCNN, AugmentedBaselineCNN
 from .efficientnet import EfficientNetModel

@@ -1,6 +1,6 @@
 from config import CFG
 from dataloader import EuroSatLoader
-from models import BaselineCNN
+from models import BaselineCNN, AugmentedBaselineCNN
 from models import EfficientNetModel
 from pathlib import Path
 from utils import ModelUtils
@@ -9,7 +9,23 @@ import numpy as np
 import json
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
+import warnings
+warnings.filterwarnings('ignore')
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+
+
+def get_model(model_type, input_shape, num_classes):
+    if model_type == 'baseline':
+        model = BaselineCNN(input_shape, num_classes)
+    elif model_type == 'augmented_baseline':
+        model = AugmentedBaselineCNN(input_shape, num_classes)
+    else:
+        raise ValueError('Invalid model type')
+        
+    return model
 
 if __name__ == '__main__':
     cfg = CFG()
@@ -25,11 +41,6 @@ if __name__ == '__main__':
                                 shuffle = True)
     train_dataset = train_loader.get_dataset()
 
-    # print("Train Dataset")
-    # for i, (x, y) in enumerate(train_dataset):
-    #     print(x.shape, y.shape)
-    #     if i == 10:
-    #         break
 
     val_loader = EuroSatLoader(csv_path = cfg.Path.val_df, 
                                 image_folder = cfg.Path.image_folder,
@@ -46,8 +57,9 @@ if __name__ == '__main__':
                                 shuffle = False)
     test_dataset = test_loader.get_dataset()
     
-    model = BaselineCNN(input_shape = cfg.HyperParameter.input_shape, 
-                        num_classes = cfg.HyperParameter.num_classes)
+    model = get_model(model_type = cfg.model_type, 
+                      input_shape = cfg.HyperParameter.input_shape, 
+                      num_classes = cfg.HyperParameter.num_classes)
     
     print(f"INFO ===========Training Started===============")
     model.compile(learning_rate= cfg.HyperParameter.learning_rate)
@@ -86,4 +98,9 @@ if __name__ == '__main__':
     ModelUtils.plot_cm(y_true = true_labels, y_pred = predicted_label, class_names = class_names,save_path=cfg.Path.cm_save_path)
     #Plot Roc Auc Curve
     ModelUtils.multiclass_roc_auc_score(y_true= true_labels, model_predicted_label= predicted_label,class_names = class_names,save_path=cfg.Path.roc_save_path)
-    
+
+    # print("Train Dataset")
+    # for i, (x, y) in enumerate(train_dataset):
+    #     print(x.shape, y.shape)
+    #     if i == 10:
+    #         break
