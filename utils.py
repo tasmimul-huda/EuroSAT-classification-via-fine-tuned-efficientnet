@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from sklearn.metrics import confusion_matrix, roc_curve, auc
+from sklearn.metrics import confusion_matrix, roc_curve, auc, roc_auc_score
+from sklearn.preprocessing import LabelBinarizer
 
 class ModelUtils:
     
@@ -68,20 +69,29 @@ class ModelUtils:
         plt.savefig(save_path+'loss_accuracy_curve.png')
         plt.show()
 
+    # function for scoring roc auc score for multi-class
     @staticmethod
-    def plot_roc_auc(y_true, y_score):
-        fpr, tpr, _ = roc_curve(y_true, y_score)
-        roc_auc = auc(fpr, tpr)
-        plt.figure(figsize=(10, 8))
-        plt.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], 'k--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('ROC AUC Curve')
-        plt.legend(loc="lower right")
+    def multiclass_roc_auc_score(y_true, model_predicted_label,class_names,save_path, average="macro"):
+        fig, c_ax = plt.subplots(1,1, figsize = (16, 16))
+        lb = LabelBinarizer()
+        lb.fit(y_true)
+        y_test = lb.transform(y_true)
+        y_pred = lb.transform(model_predicted_label)
+        
+        for (idx, c_label) in enumerate(class_names):
+            fpr, tpr, thresholds = roc_curve(y_test[:,idx].astype(int), y_pred[:,idx])
+            c_ax.plot(fpr, tpr, label = '%s (AUC:%0.2f)'  % (c_label, auc(fpr, tpr)))
+        c_ax.plot(fpr, fpr, 'b-', label = 'Random Guessing')
+        
+        c_ax.legend()
+        c_ax.set_xlabel('False Positive Rate')
+        c_ax.set_ylabel('True Positive Rate')
+        plt.savefig(save_path+'roc_auc_curve.png')
         plt.show()
+        return roc_auc_score(y_test, y_pred, average=average)
+
+
+
 
 
 
