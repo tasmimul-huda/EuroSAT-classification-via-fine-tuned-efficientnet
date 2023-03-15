@@ -21,6 +21,7 @@ class BaselineCNN:
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
         x = tf.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
+        x = tf.keras.layers.BatchNormalization() (x)
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         x = tf.keras.layers.Dense(64, activation='relu')(x)
         outputs = tf.keras.layers.Dense(self.num_classes, activation='softmax')(x)
@@ -50,7 +51,7 @@ class BaselineCNN:
         return self.model.predict(data)
     
     def summary(self):
-        return self.model.summary()
+        self.model.summary()
     
     def save_model(self, filepath):
         self.model.save(filepath)
@@ -58,17 +59,15 @@ class BaselineCNN:
     def load_model(self, model_path):
         self.model.load_weights(model_path)
         
-    def plot_model_architecture(self, file_path):
-        tf.keras.utils.plot_model(self, to_file=file_path, show_shapes=True)
+    def plot_model_architecture(self,model, file_path):
+        tf.keras.utils.plot_model(model, to_file=file_path, show_shapes=True)
         
-
-
 class AugmentedBaselineCNN:
     def __init__(self, input_shape, num_classes):
         self.input_shape = input_shape
         self.num_classes = num_classes
         self.data_augmentation = tf.keras.Sequential([
-            tf.keras.layers.RandomFlip("horizontal_and_vertical"),
+            # tf.keras.layers.RandomFlip("horizontal_and_vertical"),
             tf.keras.layers.RandomRotation(0.2),
             tf.keras.layers.RandomContrast(0.2),
             tf.keras.layers.RandomZoom(0.2)
@@ -78,22 +77,24 @@ class AugmentedBaselineCNN:
     def build_model(self):
         inputs = tf.keras.layers.Input(shape=self.input_shape)
         x = self.data_augmentation(inputs)
-        x = tf.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
-        x = tf.keras.layers.MaxPooling2D((2,2))(x)
         x = tf.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same')(x)
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
         x = tf.keras.layers.Conv2D(128, (3,3), activation='relu',padding='same')(x)
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
+        # x = tf.keras.layers.Dropout(0.3) (x)
+        x = tf.keras.layers.Conv2D(256, (3,3), activation='relu',padding='same')(x)
+        x = tf.keras.layers.MaxPooling2D((2,2))(x)
+        # x = tf.keras.layers.Dropout(0.3) (x)
+        x = tf.keras.layers.Conv2D(512, (3,3), activation='relu',padding='same')(x)
+        x = tf.keras.layers.MaxPooling2D((2,2))(x)
         x = tf.keras.layers.Dropout(0.3) (x)
         x = tf.keras.layers.Conv2D(128, (3,3), activation='relu',padding='same')(x)
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
-        x = tf.keras.layers.Dropout(0.3) (x)
         x = tf.keras.layers.Conv2D(64, (3,3), activation='relu',padding='same')(x)
         x = tf.keras.layers.MaxPooling2D((2,2))(x)
-        x = tf.keras.layers.Conv2D(32, (3,3), activation='relu',padding='same')(x)
-        x = tf.keras.layers.MaxPooling2D((2,2))(x)
+        x = tf.keras.layers.BatchNormalization() (x)
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
-        x = tf.keras.layers.Dense(64, activation='relu')(x)
+        x = tf.keras.layers.Dense(100, activation='relu')(x)
         outputs = tf.keras.layers.Dense(self.num_classes, activation='softmax')(x)
         model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
         return model
@@ -131,5 +132,5 @@ class AugmentedBaselineCNN:
         self.model.load_weights(model_path)
         
     def plot_model_architecture(self, file_path):
-        tf.keras.utilsplot_model(self, to_file=file_path, show_shapes=True)
+        tf.keras.utils.plot_model(self, to_file=file_path, show_shapes=True)
         

@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelBinarizer
 class ModelUtils:
     
     @staticmethod
-    def plot_cm(y_true, y_pred, class_names,save_path, figsize=(10,10)):
+    def plot_cm(y_true, y_pred, class_names,save_path, figsize=(8,8)):
         cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
         cm_sum = np.sum(cm, axis=1, keepdims=True)
         cm_perc = cm / cm_sum.astype(float) * 100
@@ -72,7 +72,7 @@ class ModelUtils:
     # function for scoring roc auc score for multi-class
     @staticmethod
     def multiclass_roc_auc_score(y_true, model_predicted_label,class_names,save_path, average="macro"):
-        fig, c_ax = plt.subplots(1,1, figsize = (16, 16))
+        fig, c_ax = plt.subplots(1,1, figsize = (8, 8))
         lb = LabelBinarizer()
         lb.fit(y_true)
         y_test = lb.transform(y_true)

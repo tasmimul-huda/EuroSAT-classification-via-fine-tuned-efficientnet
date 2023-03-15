@@ -1,7 +1,7 @@
 from config import CFG
 from dataloader import EuroSatLoader
 from models import BaselineCNN, AugmentedBaselineCNN
-from models import EfficientNetModel
+from models import EfficientNetModel, AugmentedEfficientNet
 from pathlib import Path
 from utils import ModelUtils
 import tensorflow as tf
@@ -15,13 +15,16 @@ warnings.filterwarnings('ignore')
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-
-
 def get_model(model_type, input_shape, num_classes):
+    print(f"Training started with {model_type}")
     if model_type == 'baseline':
         model = BaselineCNN(input_shape, num_classes)
     elif model_type == 'augmented_baseline':
         model = AugmentedBaselineCNN(input_shape, num_classes)
+    elif model_type == 'efficientnet':
+        model = EfficientNetModel(input_shape, num_classes)
+    elif model_type == 'augmented_efficientnet':
+        model = AugmentedEfficientNet(input_shape, num_classes)
     else:
         raise ValueError('Invalid model type')
         
@@ -29,7 +32,7 @@ def get_model(model_type, input_shape, num_classes):
 
 if __name__ == '__main__':
     cfg = CFG()
-    Path(cfg.Path.model_save_path).mkdir(parents = True, exist_ok = True)
+    Path(cfg.Path.saved_model_folder).mkdir(parents = True, exist_ok = True)
     Path(cfg.Path.tensorboard_logs_path).mkdir(parents = True, exist_ok = True)
     Path(cfg.Path.figure_save_path).mkdir(parents = True, exist_ok = True)
 
@@ -63,17 +66,34 @@ if __name__ == '__main__':
     
     print(f"INFO ===========Training Started===============")
     model.compile(learning_rate= cfg.HyperParameter.learning_rate)
-    history = model.train(train_data = train_dataset, 
+    
+    print(model.summary())
+    
+    if os.path.isfile(cfg.Path.model_save_path):
+        print("INFO ===========Running the Partially Trained Model===============")
+        #This code is implemented to load the partly trained model which was stopped due to some reason
+        model.load_model(cfg.Path.model_save_path)
+        history = model.train(train_data = train_dataset, 
                           val_data = val_dataset,
                           epochs = cfg.HyperParameter.epochs,
                           batch_size= cfg.HyperParameter.batch_size, 
                           model_save_path= cfg.Path.model_save_path,
                           log_dir= cfg.Path.tensorboard_logs_path)
+    else:
+        print("INFO ===========Running the Training of Model from Scratch===============")
+        # model.compile(learning_rate= cfg.HyperParameter.learning_rate)
+        history = model.train(train_data = train_dataset, 
+                          val_data = val_dataset,
+                          epochs = cfg.HyperParameter.epochs,
+                          batch_size= cfg.HyperParameter.batch_size, 
+                          model_save_path= cfg.Path.model_save_path,
+                          log_dir= cfg.Path.tensorboard_logs_path)
+        
     print(f"INFO ===========Training Finished===============")
     print(f"INFO ===========Plot Curve===============")
     ModelUtils.plot_loss_accuracy(cfg.Path.loss_acc_save_path,history)
     
-    model.load_model('D:/EuroSAT/weights/best_model_2.h5')
+    model.load_model(cfg.Path.model_save_path)
     
     train_loss, train_acc = model.evaluate(train_dataset)
     print(f"train_loss:{train_loss}:: train_accuracy: {train_acc}")
@@ -99,8 +119,39 @@ if __name__ == '__main__':
     #Plot Roc Auc Curve
     ModelUtils.multiclass_roc_auc_score(y_true= true_labels, model_predicted_label= predicted_label,class_names = class_names,save_path=cfg.Path.roc_save_path)
 
+
+
+
+
     # print("Train Dataset")
     # for i, (x, y) in enumerate(train_dataset):
     #     print(x.shape, y.shape)
     #     if i == 10:
     #         break
+    
+    
+'''
+INFO ===========Training Finished=============== BaselineCNN
+INFO ===========Plot Curve===============
+148/148 [==============================] - 49s 328ms/step - loss: 0.1734 - accuracy: 0.9451
+train_loss:0.17337167263031006:: train_accuracy: 0.9450793862342834
+43/43 [==============================] - 14s 311ms/step - loss: 0.2517 - accuracy: 0.9157
+val_loss:0.2517469525337219:: val_acc: 0.9157407283782959
+22/22 [==============================] - 6s 281ms/step - loss: 0.2454 - accuracy: 0.9189
+test_loss:0.24541887640953064:: test_acc: 0.9188888669013977
+22/22 [==============================] - 7s 287ms/step
+    
+    '''
+    
+"""  
+    INFO ===========Plot Curve=============== augment baseline
+296/296 [==============================] - 92s 310ms/step - loss: 0.2587 - accuracy: 0.9079
+train_loss:0.2587067484855652:: train_accuracy: 0.9079365134239197
+85/85 [==============================] - 27s 319ms/step - loss: 0.2856 - accuracy: 0.8961
+val_loss:0.28564929962158203:: val_acc: 0.8961111307144165
+43/43 [==============================] - 25s 564ms/step - loss: 0.2576 - accuracy: 0.9063
+test_loss:0.2576492726802826:: test_acc: 0.9062963128089905
+43/43 [==============================] - 14s 311ms/step
+
+
+"""
