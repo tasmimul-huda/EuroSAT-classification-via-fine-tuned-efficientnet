@@ -28,6 +28,8 @@
 
 ![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB1_loss_accuracy_curve.png?raw=true)
 
+[Confusion Matrix](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB1_confusion_matrix.png) || [ROC AUC](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB1_roc_auc_curve.png)
+
 <!--**Confusion Matrix For Efficientnet B1**
 ![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB1_confusion_matrix.png?raw=true)
 
