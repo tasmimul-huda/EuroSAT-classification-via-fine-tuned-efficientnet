@@ -120,58 +120,8 @@ if __name__ == '__main__':
     ModelUtils.multiclass_roc_auc_score(y_true= true_labels, model_predicted_label= predicted_label,class_names = class_names,save_path=cfg.Path.roc_save_path)
 
 
-
-
-
     # print("Train Dataset")
     # for i, (x, y) in enumerate(train_dataset):
     #     print(x.shape, y.shape)
     #     if i == 10:
     #         break
-    
-    
-'''
-INFO ===========Training Finished=============== BaselineCNN
-INFO ===========Plot Curve===============
-148/148 [==============================] - 49s 328ms/step - loss: 0.1734 - accuracy: 0.9451
-train_loss:0.17337167263031006:: train_accuracy: 0.9450793862342834
-43/43 [==============================] - 14s 311ms/step - loss: 0.2517 - accuracy: 0.9157
-val_loss:0.2517469525337219:: val_acc: 0.9157407283782959
-22/22 [==============================] - 6s 281ms/step - loss: 0.2454 - accuracy: 0.9189
-test_loss:0.24541887640953064:: test_acc: 0.9188888669013977
-22/22 [==============================] - 7s 287ms/step
-    
-    '''
-    
-"""  
-    INFO ===========Plot Curve=============== augment baseline
-296/296 [==============================] - 92s 310ms/step - loss: 0.2587 - accuracy: 0.9079
-train_loss:0.2587067484855652:: train_accuracy: 0.9079365134239197
-85/85 [==============================] - 27s 319ms/step - loss: 0.2856 - accuracy: 0.8961
-val_loss:0.28564929962158203:: val_acc: 0.8961111307144165
-43/43 [==============================] - 25s 564ms/step - loss: 0.2576 - accuracy: 0.9063
-test_loss:0.2576492726802826:: test_acc: 0.9062963128089905
-43/43 [==============================] - 14s 311ms/step
-
-
-=======================Efficient net B1
-
-296/296 [==============================] - 12s 38ms/step - loss: 0.0354 - accuracy: 0.9920
-train_loss:0.03542402386665344:: train_accuracy: 0.9920105934143066
-85/85 [==============================] - 3s 33ms/step - loss: 0.3069 - accuracy: 0.9033
-val_loss:0.3068503737449646:: val_acc: 0.903333306312561
-43/43 [==============================] - 2s 56ms/step - loss: 0.2612 - accuracy: 0.9104
-test_loss:0.26120659708976746:: test_acc: 0.9103703498840332
-43/43 [==============================] - 3s 32ms/step
-
-
-
-###EFFb2
-296/296 [==============================] - 11s 35ms/step - loss: 0.0105 - accuracy: 0.9977
-train_loss:0.010462253354489803:: train_accuracy: 0.9976719617843628
-85/85 [==============================] - 3s 29ms/step - loss: 0.2332 - accuracy: 0.9302
-val_loss:0.23319227993488312:: val_acc: 0.9301851987838745
-43/43 [==============================] - 3s 61ms/step - loss: 0.2064 - accuracy: 0.9352
-test_loss:0.20635396242141724:: test_acc: 0.9351851940155029
-43/43 [==============================] - 3s 28ms/step
-"""
