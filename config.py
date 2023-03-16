@@ -1,5 +1,6 @@
 class CFG:  
-    model_type = "efficientnet" # augmented_baseline,baseline, efficientnet
+    ''' Select one from here:(baseline, augmented_baseline, efficientnet, augmented_efficientnet) '''
+    model_type = "efficientnet" # 
     # path defination
     class Path:
         model_type = "efficientnetB2"
