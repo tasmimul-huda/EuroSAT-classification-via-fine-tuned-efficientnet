@@ -4,8 +4,10 @@
 - create a virtualenv: `virtualenv env`
 - activate env: `env\Scripts\activate`
 - install  dependencies: `pip install requirements.txt`
-- configure the config.py. specify necessary datapath
+- configure the config.py. specify necessary datapath and model_type and all figures path
 - run main.py: `python main.py`
+
+**There are two baseline models. I played a bitwith the architecture and the hyperparameters for optimization**
 
 ## Output--> BaselineCNN ---without augmentation
 **Loss Accuracy Curve For Baseline CNN**
@@ -17,6 +19,9 @@
 **Roc Auc For Baseline CNN**
 ![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/roc_auc_curve.png?raw=true)-->
 
+** In case of efficientnet without augmentation I freezes some layers of the efficient_model according to the following**
+`for layer in base_model.layers[:30]:
+            layer.trainable = False`
 ## Output--> EfficientNet B1--without augmentation
 ### Efficientnet B1
 
@@ -52,4 +57,25 @@
 
 **Roc Auc For Efficientnet B2**
 ![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB1_roc_auc_curve.png?raw=true)-->
+
+
+** In case of efficientnet using augmentation I freezes some layers of the efficient_model according to the following**
+`for layer in self.base_model.layers[:40]:  #-20
+            layer.trainable = False`
+
+## Output--> EfficientNet B2--using augmentation
+### Efficientnet B2
+
+> train_loss:0.19670043885707855:: train_accuracy: 0.931587278842926
+> val_loss:0.2384759485721588:: val_acc: 0.9235185384750366
+> test_loss:0.22396968305110931:: test_acc: 0.9233333468437195
+
+**Loss Accuracy Curve For Efficientnet B2**
+
+![alt text](https://github.com/tasmimul-huda/EuroSAT-classification-via-fine-tuned-efficientnet/blob/main/Figures/efficientnetB2_&_augmentation_loss_acc_curve.png?raw=true)
+
+
+
+**The confusion matrix and Roc curve for all models are in figures folder.**
+
 

@@ -2,14 +2,14 @@ class CFG:
     model_type = "efficientnet" # augmented_baseline,baseline, efficientnet
     # path defination
     class Path:
-        model_type = "effnet"
+        model_type = "efficientnetB2"
         
         train_df = 'D:/EuroSAT/EuroSAT/train.csv'
         val_df = 'D:/EuroSAT/EuroSAT/validation.csv'
         test_df = 'D:/EuroSAT/EuroSAT/test.csv'
         image_folder = 'D:/EuroSAT/EuroSAT/'
         saved_model_folder = 'D:/EuroSAT/weights/'
-        model_save_path = f'D:/EuroSAT/weights/{model_type}_best_model.h5'
+        model_save_path = f'D:/EuroSAT/weights/{model_type}.h5'
         tensorboard_logs_path = "D:/EuroSAT/tensorboard/logs/"
         figure_save_path = "D:/EuroSAT/Figures/"
         
